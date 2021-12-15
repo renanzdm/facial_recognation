@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:camera/camera.dart';
 import 'package:facial_recognation/services/camera_service.dart';
 import 'package:facial_recognation/services/database_service.dart';
@@ -38,8 +40,9 @@ class CreateUserController {
 
   Future<void> _frameFaces() async {
     imageSize = cameraService.getImageSize();
-     cameraService.cameraController.startImageStream((image) async {
-      
+    await cameraService.cameraController.startImageStream((image) async {
+      if (detectingFaces) return;
+      detectingFaces = true;
       try {
         List<Face> faces = await mlKitService.getFacesFromImage(image);
         if (faces.isNotEmpty) {
@@ -54,6 +57,8 @@ class CreateUserController {
         detectingFaces = false;
       } catch (e) {
         detectingFaces = false;
+        log(e.toString());
+       log(e.toString());
       }
     });
   }

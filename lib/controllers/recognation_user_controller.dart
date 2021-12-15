@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:camera/camera.dart';
 import 'package:facial_recognation/services/camera_service.dart';
 import 'package:facial_recognation/services/database_service.dart';
@@ -31,12 +33,12 @@ class RecognationUserController {
     CameraDescription _selectCamera = cameras.firstWhere(
         (element) => element.lensDirection == CameraLensDirection.front);
     await cameraService.startService(_selectCamera);
-     _frameFaces();
+    _frameFaces();
   }
 
   Future<void> _frameFaces() async {
     imageSize = cameraService.getImageSize();
-     cameraService.cameraController.startImageStream((image) async {
+    cameraService.cameraController.startImageStream((image) async {
       if (detectingFaces) return;
       detectingFaces = true;
       try {
@@ -53,15 +55,17 @@ class RecognationUserController {
         detectingFaces = false;
       } catch (e) {
         detectingFaces = false;
+        log(e.toString());
+        log(e.toString());
       }
     });
   }
 
   Future verifyUser({required BuildContext context}) async {
     saving = true;
-    await Future.delayed(const Duration(milliseconds:1000));
+    await Future.delayed(const Duration(milliseconds: 2000));
     List? valid = faceNetService.predict();
-    if (valid!=null) {
+    if (valid != null) {
       showDialog(
         context: context,
         builder: (context) {

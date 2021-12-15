@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 class User {
   List<int> dataImage;

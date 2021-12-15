@@ -14,7 +14,7 @@ class CameraService {
   late InputImageRotation _cameraRotation;
   InputImageRotation get cameraRotation => _cameraRotation;
 
-  String _imagePath = '';
+  String imagePath = '';
 
   Future<void> startService(CameraDescription cameraDescription) async {
     _cameraDescription = cameraDescription;
@@ -45,7 +45,7 @@ class CameraService {
   
   Future<XFile> takePicture() async {
     XFile file = await _cameraController.takePicture();
-    _imagePath = file.path;
+    imagePath = file.path;
     return file;
   }
 
