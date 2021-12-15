@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "850136313741",
+    "project_id": "facial-recognation-5777a",
+    "storage_bucket": "facial-recognation-5777a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:850136313741:android:0a6b6019664d7a51ccd7c4",
+        "android_client_info": {
+          "package_name": "com.example.facial_recognation"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "850136313741-al0670t5jb771rolnvs8qsqh54vri2h1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBO79OHBOYvekXcKG2aA2Mqvz1eKY5b4vk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "850136313741-al0670t5jb771rolnvs8qsqh54vri2h1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
