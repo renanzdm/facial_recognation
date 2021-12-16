@@ -15,8 +15,8 @@ class CreateUserController {
       required this.faceNetService,
       required this.dataBaseService});
 
-  final MLKitService mlKitService;
   final CameraService cameraService;
+  final MLKitService mlKitService;
   final FaceNetService faceNetService;
   final DataBaseService dataBaseService;
 
@@ -28,9 +28,7 @@ class CreateUserController {
   Future<void>? initializeControllerFuture;
 
   Future<void> startCameraService() async {
-    await faceNetService.loadModel();
-    mlKitService.initialize();
-    await dataBaseService.loadDB();
+
     List<CameraDescription> cameras = await availableCameras();
     CameraDescription _selectCamera = cameras.firstWhere(
         (element) => element.lensDirection == CameraLensDirection.front);
@@ -40,27 +38,29 @@ class CreateUserController {
 
   Future<void> _frameFaces() async {
     imageSize = cameraService.getImageSize();
-    await cameraService.cameraController.startImageStream((image) async {
-      if (detectingFaces) return;
-      detectingFaces = true;
-      try {
-        List<Face> faces = await mlKitService.getFacesFromImage(image);
-        if (faces.isNotEmpty) {
-          faceDetected.value = faces[0];
-          if (saving) {
-            faceNetService.setCurrentPrediction(image, faceDetected.value!);
-            saving = false;
+    await cameraService.cameraController.startImageStream(
+      (image) async {
+        if (detectingFaces) return;
+        detectingFaces = true;
+        try {
+          List<Face> faces = await mlKitService.getFacesFromImage(image);
+          if (faces.isNotEmpty) {
+            faceDetected.value = faces[0];
+            if (saving) {
+              faceNetService.setCurrentPrediction(image, faceDetected.value!);
+              saving = false;
+            }
+          } else {
+            faceDetected.value = null;
           }
-        } else {
-          faceDetected.value = null;
+          detectingFaces = false;
+        } catch (e) {
+          detectingFaces = false;
+          log(e.toString());
+          log(e.toString());
         }
-        detectingFaces = false;
-      } catch (e) {
-        detectingFaces = false;
-        log(e.toString());
-       log(e.toString());
-      }
-    });
+      },
+    );
   }
 
   Future createUser(context) async {
@@ -69,6 +69,7 @@ class CreateUserController {
         context: context,
         builder: (context) {
           return const AlertDialog(
+            backgroundColor: Colors.red,
             content: Text('No face detected!'),
           );
         },

@@ -14,6 +14,7 @@ class RecognationUserController {
       required this.cameraService,
       required this.faceNetService,
       required this.dataBaseService});
+
   final MLKitService mlKitService;
   final CameraService cameraService;
   final FaceNetService faceNetService;
@@ -26,9 +27,6 @@ class RecognationUserController {
   Future<void>? initializeControllerFuture;
 
   Future<void> startCameraService() async {
-    await faceNetService.loadModel();
-    mlKitService.initialize();
-    await dataBaseService.loadDB();
     List<CameraDescription> cameras = await availableCameras();
     CameraDescription _selectCamera = cameras.firstWhere(
         (element) => element.lensDirection == CameraLensDirection.front);
@@ -70,7 +68,8 @@ class RecognationUserController {
         context: context,
         builder: (context) {
           return const AlertDialog(
-            content: Text('User autheticated'),
+            backgroundColor: Colors.green,
+            content: Text('User Authenticated'),
           );
         },
       );
@@ -82,6 +81,7 @@ class RecognationUserController {
         context: context,
         builder: (context) {
           return const AlertDialog(
+            backgroundColor: Colors.red,
             content: Text('User is not Authenticate'),
           );
         },

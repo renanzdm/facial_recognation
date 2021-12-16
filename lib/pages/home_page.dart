@@ -1,21 +1,38 @@
+import 'package:facial_recognation/services/database_service.dart';
+import 'package:facial_recognation/services/face_net_service.dart';
+import 'package:facial_recognation/services/ml_kit_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'create_user.dart';
 import 'recognation_user.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    Color getColor(Set<MaterialState> states) {
-      if (states.contains(MaterialState.pressed)) {
-        return Colors.red;
-      }
-      return Colors.blue;
-    }
+  State<HomePage> createState() => _HomePageState();
+}
 
+class _HomePageState extends State<HomePage> {
+  final MLKitService mlKitService = MLKitService();
+  final FaceNetService faceNetService=FaceNetService();
+  final DataBaseService dataBaseService=DataBaseService();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance?.addPostFrameCallback(
+      (_) async {
+        await faceNetService.loadModel();
+        mlKitService.initialize();
+        await dataBaseService.loadDB();
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home'),
@@ -29,7 +46,7 @@ class HomePage extends StatelessWidget {
                 onPressed: () {
                   Navigator.of(context).push(
                     CupertinoPageRoute(
-                      builder: (_) =>const  CreateUser(),
+                      builder: (_) => const CreateUser(),
                     ),
                   );
                 },
@@ -58,5 +75,12 @@ class HomePage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Color getColor(Set<MaterialState> states) {
+    if (states.contains(MaterialState.pressed)) {
+      return Colors.red;
+    }
+    return Colors.blue;
   }
 }
