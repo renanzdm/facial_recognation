@@ -1,5 +1,5 @@
 import 'package:camera/camera.dart';
-import 'package:facial_recognation/controllers/recognation_user_controller.dart';
+import 'package:facial_recognation/controllers/recognition_user_controller.dart';
 import 'package:facial_recognation/services/camera_service.dart';
 import 'package:facial_recognation/services/database_service.dart';
 import 'package:facial_recognation/services/face_net_service.dart';
@@ -62,28 +62,24 @@ class _RecognationUserState extends State<RecognationUser> {
               return SizedBox(
                 width: width,
                 height: height,
-                child: AspectRatio(
-                  aspectRatio: _recognationUserController
-                      .cameraService.cameraController.value.aspectRatio,
-                  child: ValueListenableBuilder<Face?>(
-                    valueListenable: _recognationUserController.faceDetected,
-                    builder: (context,value,child) {
-                      return Stack(
-                        fit: StackFit.expand,
-                        children: <Widget>[
-                          CameraPreview(_recognationUserController
-                              .cameraService.cameraController),
-                          if (value != null)
-                            CustomPaint(
-                              size: Size(width, height),
-                              painter: FacePainter(
-                                  face: value,
-                                  imageSize: _recognationUserController.imageSize),
-                            ),
-                        ],
-                      );
-                    }
-                  ),
+                child: ValueListenableBuilder<Face?>(
+                  valueListenable: _recognationUserController.faceDetected,
+                  builder: (context,value,child) {
+                    return Stack(
+                      fit: StackFit.expand,
+                      children: <Widget>[
+                        CameraPreview(_recognationUserController
+                            .cameraService.cameraController),
+                        if (value != null)
+                          CustomPaint(
+                            size: Size(width, height),
+                            painter: FacePainter(
+                                face: value,
+                                imageSize: _recognationUserController.imageSize),
+                          ),
+                      ],
+                    );
+                  }
                 ),
               );
             } else if (snapshot.connectionState == ConnectionState.waiting) {

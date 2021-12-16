@@ -61,31 +61,49 @@ class RecognationUserController {
 
   Future verifyUser({required BuildContext context}) async {
     saving = true;
-    await Future.delayed(const Duration(milliseconds: 2000));
-    List? valid = faceNetService.predict();
-    if (valid != null) {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return const AlertDialog(
-            backgroundColor: Colors.green,
-            content: Text('User Authenticated'),
-          );
-        },
+    showDialog(context: context, builder: (context){
+      return const Center(
+        child: CircularProgressIndicator(),
       );
-    } else {
-      saving = true;
-      faceNetService.clearPredicatedDate();
-
+    });
+    await Future.delayed(const Duration(milliseconds: 3000));
+    Navigator.pop(context);
+    List? valid = faceNetService.predict();
+    if (faceDetected.value == null) {
       showDialog(
         context: context,
         builder: (context) {
           return const AlertDialog(
             backgroundColor: Colors.red,
-            content: Text('User is not Authenticate'),
+            content: Text('No face detected!'),
           );
         },
       );
+    } else {
+      if (valid != null) {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return const AlertDialog(
+              backgroundColor: Colors.green,
+              content: Text('User Authenticated'),
+            );
+          },
+        );
+      } else {
+        saving = true;
+        faceNetService.clearPredicatedDate();
+
+        showDialog(
+          context: context,
+          builder: (context) {
+            return const AlertDialog(
+              backgroundColor: Colors.red,
+              content: Text('User is not Authenticate'),
+            );
+          },
+        );
+      }
     }
   }
 }

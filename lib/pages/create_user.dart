@@ -59,28 +59,24 @@ class _CreateUserState extends State<CreateUser> {
               return SizedBox(
                 width: width,
                 height: height,
-                child: AspectRatio(
-                  aspectRatio: _createUserController
-                      .cameraService.cameraController.value.aspectRatio,
-                  child: ValueListenableBuilder<Face?>(
-                    valueListenable: _createUserController.faceDetected,
-                    builder: (context,value,widget) {
-                      return Stack(
-                        fit: StackFit.expand,
-                        children: <Widget>[
-                          CameraPreview(
-                              _createUserController.cameraService.cameraController),
-                          if (value != null)
-                            CustomPaint(
-                              size: Size(width, height),
-                              painter: FacePainter(
-                                  face: value,
-                                  imageSize: _createUserController.imageSize),
-                            ),
-                        ],
-                      );
-                    }
-                  ),
+                child: ValueListenableBuilder<Face?>(
+                  valueListenable: _createUserController.faceDetected,
+                  builder: (context,value,widget) {
+                    return Stack(
+                      fit: StackFit.expand,
+                      children: <Widget>[
+                        CameraPreview(
+                            _createUserController.cameraService.cameraController),
+                        if (value != null)
+                          CustomPaint(
+                            size: Size(width, height),
+                            painter: FacePainter(
+                                face: value,
+                                imageSize: _createUserController.imageSize),
+                          ),
+                      ],
+                    );
+                  }
                 ),
               );
             } else if (snapshot.connectionState == ConnectionState.waiting) {
